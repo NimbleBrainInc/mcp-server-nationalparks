@@ -47,11 +47,20 @@ jobs:
         run: |
           npm ci
           npm run build
+          # Reinstall production-only deps
+          rm -rf node_modules
+          npm install --omit=dev
 
-      - uses: NimbleBrainInc/mcpb-pack@v1
+      - name: Create bundle
         id: pack
-        with:
-          output: mcp-server-nationalparks-v${{ steps.version.outputs.version }}-linux-${{ matrix.arch }}.mcpb
+        run: |
+          OUTPUT="mcp-server-nationalparks-v${{ steps.version.outputs.version }}-linux-${{ matrix.arch }}.mcpb"
+          # Create bundle manually using zip
+          zip -r "$OUTPUT" manifest.json package.json build/ node_modules/
+          SHA256=$(sha256sum "$OUTPUT" | cut -d' ' -f1)
+          echo "bundle-path=$OUTPUT" >> $GITHUB_OUTPUT
+          echo "Bundle size: $(du -h "$OUTPUT" | cut -f1)"
+          echo "Bundle SHA256: $SHA256"
 
       - uses: actions/upload-artifact@v4
         with:
