@@ -1,14 +1,12 @@
 {
   "name": "mcp-server-nationalparks",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "MCP server for National Parks Service API",
+  "main": "build/index.js",
   "type": "module",
-  "bin": {
-    "mcp-server-nationalparks": "./build/index.js"
-  },
   "scripts": {
-    "build": "tsc && chmod 755 build/index.js",
+    "build": "tsc",
+    "start": "node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
@@ -16,24 +14,25 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KyrieTangSheng/mcp-server-nationalparks.git"
+    "url": "git+https://github.com/NimbleBrainInc/mcp-server-nationalparks.git"
   },
   "keywords": ["mcp", "claude", "national-parks", "api", "anthropic"],
-  "author": "Tang Sheng",
+  "author": "NimbleBrain Inc",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/KyrieTangSheng/mcp-server-nationalparks/issues"
+    "url": "https://github.com/NimbleBrainInc/mcp-server-nationalparks/issues"
   },
-  "homepage": "https://github.com/KyrieTangSheng/mcp-server-nationalparks#readme",
+  "homepage": "https://github.com/NimbleBrainInc/mcp-server-nationalparks#readme",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.7.0",
+    "@modelcontextprotocol/sdk": "^1.25.1",
     "axios": "^1.8.4",
     "dotenv": "^16.4.7",
-    "zod": "^3.24.2"
+    "zod": "^3.24.2",
+    "zod-to-json-schema": "^3.25.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.0",
     "@types/node": "^22.13.10",
-    "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   }
 }

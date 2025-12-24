@@ -1,0 +1,30 @@
+# Always include these
+node_modules/
+.git/
+.github/
+.pytest_cache/
+__pycache__/
+*.pyc
+.mypy_cache/
+.ruff_cache/
+.coverage
+tests/
+dist/
+*.egg-info/
+*.mcpb
+Makefile
+pytest.ini
+.env
+.env.*
+.vscode/
+.idea/
+
+# Node.js specific
+src/
+*.ts
+tsconfig.json
+package-lock.json
+smithery.yaml
+Dockerfile
+*.md
+LICENSE

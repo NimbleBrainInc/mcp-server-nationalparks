@@ -1,0 +1,13 @@
+{
+  "manifest_version": "0.3",
+  "name": "ai.nimbletools/nationalparks",
+  "version": "1.0.0",
+  "description": "MCP server for National Parks Service API",
+  "author": {
+    "name": "NimbleBrain Inc"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "build/index.js"
+  }
+}
