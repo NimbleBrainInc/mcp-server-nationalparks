@@ -38,6 +38,16 @@ jobs:
           jq --arg v "${{ steps.version.outputs.version }}" '.version = $v' manifest.json > manifest.tmp.json
           mv manifest.tmp.json manifest.json
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build
+
       - uses: NimbleBrainInc/mcpb-pack@v1
         id: pack
         with:

@@ -1,5 +1,4 @@
-# Always include these
-node_modules/
+# Always exclude these
 .git/
 .github/
 .pytest_cache/
