@@ -36,8 +36,8 @@ export async function getVisitorCentersHandler(args: z.infer<typeof GetVisitorCe
   };
   
   return {
-    content: [{ 
-      type: "text", 
+    content: [{
+      type: "text" as const,
       text: JSON.stringify(result, null, 2)
     }]
   };

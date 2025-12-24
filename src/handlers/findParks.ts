@@ -12,8 +12,8 @@ export async function findParksHandler(args: z.infer<typeof FindParksSchema>) {
     
     if (invalidStates.length > 0) {
       return {
-        content: [{ 
-          type: "text", 
+        content: [{
+          type: "text" as const,
           text: JSON.stringify({
             error: `Invalid state code(s): ${invalidStates.join(', ')}`,
             validStateCodes: STATE_CODES
@@ -45,8 +45,8 @@ export async function findParksHandler(args: z.infer<typeof FindParksSchema>) {
   };
   
   return {
-    content: [{ 
-      type: "text", 
+    content: [{
+      type: "text" as const,
       text: JSON.stringify(result, null, 2)
     }]
   };

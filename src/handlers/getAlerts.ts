@@ -36,8 +36,8 @@ export async function getAlertsHandler(args: z.infer<typeof GetAlertsSchema>) {
   };
   
   return {
-    content: [{ 
-      type: "text", 
+    content: [{
+      type: "text" as const,
       text: JSON.stringify(result, null, 2)
     }]
   };

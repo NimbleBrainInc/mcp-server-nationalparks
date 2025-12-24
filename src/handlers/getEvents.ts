@@ -36,8 +36,8 @@ export async function getEventsHandler(args: z.infer<typeof GetEventsSchema>) {
   };
   
   return {
-    content: [{ 
-      type: "text", 
+    content: [{
+      type: "text" as const,
       text: JSON.stringify(result, null, 2)
     }]
   };

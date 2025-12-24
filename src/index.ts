@@ -2,6 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import type { Request, Response } from "express";
+import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import dotenv from "dotenv";
 
 import { VERSION } from "./constants.js";
@@ -19,20 +20,14 @@ import { getAlertsHandler } from "./handlers/getAlerts.js";
 import { getVisitorCentersHandler } from "./handlers/getVisitorCenters.js";
 import { getCampgroundsHandler } from "./handlers/getCampgrounds.js";
 import { getEventsHandler } from "./handlers/getEvents.js";
-import { zodToJsonSchema } from "zod-to-json-schema";
-import { z } from "zod";
 
 // Load environment variables
 dotenv.config();
 
 // Check for API key
 if (!process.env.NPS_API_KEY) {
-  console.warn(
-    "Warning: NPS_API_KEY is not set in environment variables."
-  );
-  console.warn(
-    "Get your API key at: https://www.nps.gov/subjects/developer/get-started.htm"
-  );
+  console.warn("Warning: NPS_API_KEY is not set in environment variables.");
+  console.warn("Get your API key at: https://www.nps.gov/subjects/developer/get-started.htm");
 }
 
 // Create and configure the MCP server
@@ -49,132 +44,81 @@ function createServer(): McpServer {
     }
   );
 
-  // Register tools
-  server.server.setRequestHandler(
-    { method: "tools/list" } as any,
-    async () => {
-      return {
-        tools: [
-          {
-            name: "findParks",
-            description:
-              "Search for national parks based on state, name, activities, or other criteria",
-            inputSchema: zodToJsonSchema(FindParksSchema),
-          },
-          {
-            name: "getParkDetails",
-            description:
-              "Get detailed information about a specific national park",
-            inputSchema: zodToJsonSchema(GetParkDetailsSchema),
-          },
-          {
-            name: "getAlerts",
-            description:
-              "Get current alerts for national parks including closures, hazards, and important information",
-            inputSchema: zodToJsonSchema(GetAlertsSchema),
-          },
-          {
-            name: "getVisitorCenters",
-            description:
-              "Get information about visitor centers and their operating hours",
-            inputSchema: zodToJsonSchema(GetVisitorCentersSchema),
-          },
-          {
-            name: "getCampgrounds",
-            description:
-              "Get information about available campgrounds and their amenities",
-            inputSchema: zodToJsonSchema(GetCampgroundsSchema),
-          },
-          {
-            name: "getEvents",
-            description: "Find upcoming events at parks",
-            inputSchema: zodToJsonSchema(GetEventsSchema),
-          },
-        ],
-      };
+  // Register findParks tool
+  server.registerTool(
+    "findParks",
+    {
+      description: "Search for national parks based on state, name, activities, or other criteria",
+      inputSchema: FindParksSchema,
+    },
+    async (args): Promise<CallToolResult> => {
+      const parsed = FindParksSchema.parse(args);
+      return await findParksHandler(parsed);
     }
   );
 
-  // Handle tool executions
-  server.server.setRequestHandler(
-    { method: "tools/call" } as any,
-    async (request: any) => {
-      try {
-        if (!request.params.arguments) {
-          throw new Error("Arguments are required");
-        }
+  // Register getParkDetails tool
+  server.registerTool(
+    "getParkDetails",
+    {
+      description: "Get detailed information about a specific national park",
+      inputSchema: GetParkDetailsSchema,
+    },
+    async (args): Promise<CallToolResult> => {
+      const parsed = GetParkDetailsSchema.parse(args);
+      return await getParkDetailsHandler(parsed);
+    }
+  );
 
-        switch (request.params.name) {
-          case "findParks": {
-            const args = FindParksSchema.parse(request.params.arguments);
-            return await findParksHandler(args);
-          }
+  // Register getAlerts tool
+  server.registerTool(
+    "getAlerts",
+    {
+      description: "Get current alerts for national parks including closures, hazards, and important information",
+      inputSchema: GetAlertsSchema,
+    },
+    async (args): Promise<CallToolResult> => {
+      const parsed = GetAlertsSchema.parse(args);
+      return await getAlertsHandler(parsed);
+    }
+  );
 
-          case "getParkDetails": {
-            const args = GetParkDetailsSchema.parse(request.params.arguments);
-            return await getParkDetailsHandler(args);
-          }
+  // Register getVisitorCenters tool
+  server.registerTool(
+    "getVisitorCenters",
+    {
+      description: "Get information about visitor centers and their operating hours",
+      inputSchema: GetVisitorCentersSchema,
+    },
+    async (args): Promise<CallToolResult> => {
+      const parsed = GetVisitorCentersSchema.parse(args);
+      return await getVisitorCentersHandler(parsed);
+    }
+  );
 
-          case "getAlerts": {
-            const args = GetAlertsSchema.parse(request.params.arguments);
-            return await getAlertsHandler(args);
-          }
+  // Register getCampgrounds tool
+  server.registerTool(
+    "getCampgrounds",
+    {
+      description: "Get information about available campgrounds and their amenities",
+      inputSchema: GetCampgroundsSchema,
+    },
+    async (args): Promise<CallToolResult> => {
+      const parsed = GetCampgroundsSchema.parse(args);
+      return await getCampgroundsHandler(parsed);
+    }
+  );
 
-          case "getVisitorCenters": {
-            const args = GetVisitorCentersSchema.parse(request.params.arguments);
-            return await getVisitorCentersHandler(args);
-          }
-
-          case "getCampgrounds": {
-            const args = GetCampgroundsSchema.parse(request.params.arguments);
-            return await getCampgroundsHandler(args);
-          }
-
-          case "getEvents": {
-            const args = GetEventsSchema.parse(request.params.arguments);
-            return await getEventsHandler(args);
-          }
-
-          default:
-            throw new Error(`Unknown tool: ${request.params.name}`);
-        }
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(
-                  {
-                    error: "Validation error",
-                    details: error.errors,
-                  },
-                  null,
-                  2
-                ),
-              },
-            ],
-          };
-        }
-
-        console.error("Error executing tool:", error);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(
-                {
-                  error: "Server error",
-                  message:
-                    error instanceof Error ? error.message : "Unknown error",
-                },
-                null,
-                2
-              ),
-            },
-          ],
-        };
-      }
+  // Register getEvents tool
+  server.registerTool(
+    "getEvents",
+    {
+      description: "Find upcoming events at parks",
+      inputSchema: GetEventsSchema,
+    },
+    async (args): Promise<CallToolResult> => {
+      const parsed = GetEventsSchema.parse(args);
+      return await getEventsHandler(parsed);
     }
   );
 

@@ -9,8 +9,8 @@ export async function getParkDetailsHandler(args: z.infer<typeof GetParkDetailsS
   // Check if park was found
   if (!response.data || response.data.length === 0) {
     return {
-      content: [{ 
-        type: "text", 
+      content: [{
+        type: "text" as const,
         text: JSON.stringify({
           error: 'Park not found',
           message: `No park found with park code: ${args.parkCode}`
@@ -23,8 +23,8 @@ export async function getParkDetailsHandler(args: z.infer<typeof GetParkDetailsS
   const parkDetails = formatParkDetails(response.data[0]);
   
   return {
-    content: [{ 
-      type: "text", 
+    content: [{
+      type: "text" as const,
       text: JSON.stringify(parkDetails, null, 2)
     }]
   };
