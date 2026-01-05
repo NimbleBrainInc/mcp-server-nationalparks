@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import type { Request, Response } from "express";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import dotenv from "dotenv";
@@ -189,14 +190,33 @@ app.delete("/mcp", async (_req: Request, res: Response) => {
   );
 });
 
-const PORT = parseInt(process.env.PORT || "8000", 10);
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`National Parks MCP Server listening on port ${PORT}`);
-  console.log(`Health endpoint: http://localhost:${PORT}/health`);
-  console.log(`MCP endpoint: http://localhost:${PORT}/mcp`);
-});
+// Check for stdio mode (for mpak / Claude Desktop)
+const isStdioMode = process.argv.includes("--stdio");
 
-process.on("SIGINT", () => {
-  console.log("Shutting down server...");
-  process.exit(0);
-});
+if (isStdioMode) {
+  // Stdio mode for mpak / Claude Desktop
+  const server = createServer();
+  const transport = new StdioServerTransport();
+  server.connect(transport).catch((error) => {
+    console.error("Failed to connect stdio transport:", error);
+    process.exit(1);
+  });
+
+  process.on("SIGINT", () => {
+    server.close();
+    process.exit(0);
+  });
+} else {
+  // HTTP mode for cloud deployment
+  const PORT = parseInt(process.env.PORT || "8000", 10);
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`National Parks MCP Server listening on port ${PORT}`);
+    console.log(`Health endpoint: http://localhost:${PORT}/health`);
+    console.log(`MCP endpoint: http://localhost:${PORT}/mcp`);
+  });
+
+  process.on("SIGINT", () => {
+    console.log("Shutting down server...");
+    process.exit(0);
+  });
+}
