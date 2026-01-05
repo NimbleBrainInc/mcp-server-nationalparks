@@ -19,7 +19,7 @@ pytest.ini
 .idea/
 
 # Node.js specific
-src/
+/src/
 *.ts
 tsconfig.json
 package-lock.json
