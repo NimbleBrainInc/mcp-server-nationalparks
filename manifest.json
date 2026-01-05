@@ -1,19 +1,29 @@
 {
   "manifest_version": "0.3",
-  "name": "ai.nimbletools/nationalparks",
-  "version": "0.1.0",
+  "name": "@nimblebraininc/nationalparks",
+  "version": "0.1.1",
   "description": "MCP server for National Parks Service API",
   "author": {
     "name": "NimbleBrain Inc"
+  },
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "NPS API Key",
+      "description": "Your NPS API key from https://www.nps.gov/subjects/developer/get-started.htm",
+      "sensitive": true,
+      "required": true
+    }
   },
   "server": {
     "type": "node",
     "entry_point": "build/index.js",
     "mcp_config": {
       "command": "node",
-      "args": [
-        "${__dirname}/build/index.js"
-      ]
+      "args": ["${__dirname}/build/index.js"],
+      "env": {
+        "NPS_API_KEY": "${user_config.api_key}"
+      }
     }
   }
 }
