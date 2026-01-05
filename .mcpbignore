@@ -8,7 +8,7 @@ __pycache__/
 .ruff_cache/
 .coverage
 tests/
-dist/
+/dist/
 *.egg-info/
 *.mcpb
 Makefile
