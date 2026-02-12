@@ -1,29 +1,33 @@
-# Always exclude these
+# Development environment
 .git/
 .github/
-.pytest_cache/
-__pycache__/
-*.pyc
-.mypy_cache/
-.ruff_cache/
-.coverage
-tests/
-/dist/
-*.egg-info/
-*.mcpb
-Makefile
-pytest.ini
-.env
-.env.*
 .vscode/
 .idea/
 
-# Node.js specific
+# Source (bundle uses compiled build/)
 /src/
-*.ts
 tsconfig.json
-package-lock.json
+
+# Dev/build config
+Makefile
 smithery.yaml
 Dockerfile
+scripts/
+
+# Environment
+.env
+.env.*
+
+# Bundle artifacts
+*.mcpb
+
+# Documentation (not needed at runtime)
 *.md
 LICENSE
+
+# Registry metadata
+mpak.json
+
+# Claude Code
+.claude/
+CLAUDE.md

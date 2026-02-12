@@ -1,10 +1,15 @@
 {
-  "manifest_version": "0.3",
+  "manifest_version": "0.4",
   "name": "@nimblebraininc/nationalparks",
-  "version": "0.1.1",
-  "description": "MCP server for National Parks Service API",
+  "version": "0.2.0",
+  "description": "MCP server for National Parks Service API - search parks, get details, alerts, campgrounds, events, and visitor centers",
   "author": {
-    "name": "NimbleBrain Inc"
+    "name": "NimbleBrain Inc",
+    "email": "hello@nimblebrain.ai"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NimbleBrainInc/mcp-server-nationalparks"
   },
   "user_config": {
     "api_key": {
@@ -23,6 +28,45 @@
       "args": ["${__dirname}/build/index.js", "--stdio"],
       "env": {
         "NPS_API_KEY": "${user_config.api_key}"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "findParks",
+      "description": "Search for national parks based on state, name, activities, or other criteria"
+    },
+    {
+      "name": "getParkDetails",
+      "description": "Get detailed information about a specific national park"
+    },
+    {
+      "name": "getAlerts",
+      "description": "Get current alerts for national parks including closures, hazards, and important information"
+    },
+    {
+      "name": "getVisitorCenters",
+      "description": "Get information about visitor centers and their operating hours"
+    },
+    {
+      "name": "getCampgrounds",
+      "description": "Get information about available campgrounds and their amenities"
+    },
+    {
+      "name": "getEvents",
+      "description": "Find upcoming events at parks"
+    }
+  ],
+  "_meta": {
+    "org.mpaktrust": {
+      "mtf_version": "0.1",
+      "level": 2,
+      "permissions": {
+        "filesystem": "none",
+        "network": "outbound",
+        "environment": "read",
+        "subprocess": "none",
+        "native": "none"
       }
     }
   }

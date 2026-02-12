@@ -32,7 +32,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies and build
-        run: npm ci && npm run build
+        run: npm ci && npm run build && npm prune --omit=dev
 
       - name: Update manifest version
         run: |
