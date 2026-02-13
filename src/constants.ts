@@ -9,4 +9,4 @@ export const STATE_CODES = [
 ];
 
 // Version information
-export const VERSION = '0.2.0'; 
+export const VERSION = '0.2.1'; 

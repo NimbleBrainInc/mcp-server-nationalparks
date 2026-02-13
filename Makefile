@@ -1,7 +1,7 @@
 # MCPB bundle configuration
 VERSION ?= 0.2.0
 
-.PHONY: help build clean bundle bundle-run run run-stdio run-http test-http bump check
+.PHONY: help build clean bundle bundle-run run run-stdio run-http test-http test test-e2e bump check
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -27,7 +27,13 @@ test-http: ## Test HTTP server is running
 	@echo "Testing health endpoint..."
 	@curl -s http://localhost:8000/health | grep -q "healthy" && echo "✓ Server is healthy" || echo "✗ Server not responding"
 
-check: build ## Build and verify
+test: ## Run unit tests
+	npm test
+
+test-e2e: ## Run e2e MCPB tests (requires Docker)
+	uv run pytest e2e/ -v
+
+check: build test ## Build and verify
 
 # MCPB bundle commands
 bundle: ## Build MCPB bundle locally

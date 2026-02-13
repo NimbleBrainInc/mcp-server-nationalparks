@@ -1,150 +1,198 @@
 # National Parks MCP Server
-[![smithery badge](https://smithery.ai/badge/@KyrieTangSheng/mcp-server-nationalparks)](https://smithery.ai/server/@KyrieTangSheng/mcp-server-nationalparks)
 
-MCP Server for the National Park Service (NPS) API, providing real-time information about U.S. National Parks, including park details, alerts, and activities.
+[![mpak](https://img.shields.io/badge/mpak-registry-blue)](https://mpak.dev/packages/@nimblebraininc/nationalparks?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks)
+[![NimbleBrain](https://img.shields.io/badge/NimbleBrain-nimblebrain.ai-purple)](https://nimblebrain.ai?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks)
+[![Discord](https://img.shields.io/badge/Discord-community-5865F2)](https://nimblebrain.ai/discord?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Tools
+A [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server for the National Park Service API. Search parks, get details, check alerts, find campgrounds, browse events, and locate visitor centers across all U.S. national parks.
 
-1. `findParks`
-   - Search for national parks based on various criteria
-   - Inputs:
-     - `stateCode` (optional string): Filter parks by state code (e.g., "CA" for California). Multiple states can be comma-separated (e.g., "CA,OR,WA")
-     - `q` (optional string): Search term to filter parks by name or description
-     - `limit` (optional number): Maximum number of parks to return (default: 10, max: 50)
-     - `start` (optional number): Start position for results (useful for pagination)
-     - `activities` (optional string): Filter by available activities (e.g., "hiking,camping")
-   - Returns: Matching parks with detailed information
+**[View on mpak registry](https://mpak.dev/packages/@nimblebraininc/nationalparks?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks)** | **Built by [NimbleBrain](https://nimblebrain.ai?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks)**
 
-2. `getParkDetails`
-   - Get comprehensive information about a specific national park
-   - Inputs:
-     - `parkCode` (string): The park code of the national park (e.g., "yose" for Yosemite, "grca" for Grand Canyon)
-   - Returns: Detailed park information including descriptions, hours, fees, contacts, and activities
+## Install
 
-3. `getAlerts`
-   - Get current alerts for national parks including closures, hazards, and important information
-   - Inputs:
-     - `parkCode` (optional string): Filter alerts by park code (e.g., "yose" for Yosemite). Multiple parks can be comma-separated (e.g., "yose,grca")
-     - `limit` (optional number): Maximum number of alerts to return (default: 10, max: 50)
-     - `start` (optional number): Start position for results (useful for pagination)
-     - `q` (optional string): Search term to filter alerts by title or description
-   - Returns: Current alerts organized by park
-
-4. `getVisitorCenters`
-   - Get information about visitor centers and their operating hours
-   - Inputs:
-     - `parkCode` (optional string): Filter visitor centers by park code (e.g., "yose" for Yosemite). Multiple parks can be comma-separated (e.g., "yose,grca")
-     - `limit` (optional number): Maximum number of visitor centers to return (default: 10, max: 50)
-     - `start` (optional number): Start position for results (useful for pagination)
-     - `q` (optional string): Search term to filter visitor centers by name or description
-   - Returns: Visitor center information including location, hours, and contact details
-
-5. `getCampgrounds`
-   - Get information about available campgrounds and their amenities
-   - Inputs:
-     - `parkCode` (optional string): Filter campgrounds by park code (e.g., "yose" for Yosemite). Multiple parks can be comma-separated (e.g., "yose,grca")
-     - `limit` (optional number): Maximum number of campgrounds to return (default: 10, max: 50)
-     - `start` (optional number): Start position for results (useful for pagination)
-     - `q` (optional string): Search term to filter campgrounds by name or description
-   - Returns: Campground information including amenities, fees, and reservation details
-
-6. `getEvents`
-   - Find upcoming events at parks
-   - Inputs:
-     - `parkCode` (optional string): Filter events by park code (e.g., "yose" for Yosemite). Multiple parks can be comma-separated (e.g., "yose,grca")
-     - `limit` (optional number): Maximum number of events to return (default: 10, max: 50)
-     - `start` (optional number): Start position for results (useful for pagination)
-     - `dateStart` (optional string): Start date for filtering events (format: YYYY-MM-DD)
-     - `dateEnd` (optional string): End date for filtering events (format: YYYY-MM-DD)
-     - `q` (optional string): Search term to filter events by title or description
-   - Returns: Event information including dates, times, and descriptions
-
-## Setup
-
-### Installing via Smithery
-
-To install mcp-server-nationalparks for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@KyrieTangSheng/mcp-server-nationalparks):
+Install with [mpak](https://mpak.dev?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks):
 
 ```bash
-npx -y @smithery/cli install @KyrieTangSheng/mcp-server-nationalparks --client claude
+mpak install @nimblebraininc/nationalparks
 ```
 
-### NPS API Key
-1. Get a free API key from the [National Park Service Developer Portal](https://www.nps.gov/subjects/developer/get-started.htm)
-2. Store this key securely as it will be used to authenticate requests
+### Configuration
 
-### Usage with Claude Desktop
+This server requires a free API key from the [National Park Service Developer Portal](https://www.nps.gov/subjects/developer/get-started.htm).
 
-To use this server with Claude Desktop, add the following to your `claude_desktop_config.json`:
+```bash
+mpak config set @nimblebraininc/nationalparks api_key YOUR_NPS_API_KEY
+```
+
+### Claude Code
+
+```bash
+claude mcp add nationalparks -- mpak run @nimblebraininc/nationalparks
+```
+
+### Claude Desktop
+
+Add to your `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "nationalparks": {
-      "command": "npx",
-      "args": ["-y", "mcp-server-nationalparks"],
-      "env": {
-        "NPS_API_KEY": "YOUR_NPS_API_KEY"
-      }
+      "command": "mpak",
+      "args": ["run", "@nimblebraininc/nationalparks"]
     }
   }
 }
 ```
-## Example Usage
 
-### Finding Parks in a State
+See the [mpak registry page](https://mpak.dev/packages/@nimblebraininc/nationalparks?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks) for full install options.
+
+## Tools
+
+### findParks
+
+Search for national parks based on state, name, activities, or other criteria.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `stateCode` | `string` | No | State code, e.g. `"CA"` or `"CA,OR,WA"` |
+| `q` | `string` | No | Search term for name or description |
+| `limit` | `number` | No | Max results (default: 10, max: 50) |
+| `start` | `number` | No | Start position for pagination |
+| `activities` | `string` | No | Filter by activities, e.g. `"hiking,camping"` |
+
+### getParkDetails
+
+Get detailed information about a specific national park including descriptions, hours, fees, contacts, and activities.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `parkCode` | `string` | Yes | Park code, e.g. `"yose"` for Yosemite |
+
+### getAlerts
+
+Get current alerts for national parks including closures, hazards, and important information.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `parkCode` | `string` | No | Park code(s), e.g. `"yose"` or `"yose,grca"` |
+| `limit` | `number` | No | Max results (default: 10, max: 50) |
+| `start` | `number` | No | Start position for pagination |
+| `q` | `string` | No | Search term for title or description |
+
+### getVisitorCenters
+
+Get information about visitor centers and their operating hours.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `parkCode` | `string` | No | Park code(s), e.g. `"yose"` or `"yose,grca"` |
+| `limit` | `number` | No | Max results (default: 10, max: 50) |
+| `start` | `number` | No | Start position for pagination |
+| `q` | `string` | No | Search term for name or description |
+
+### getCampgrounds
+
+Get information about available campgrounds and their amenities.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `parkCode` | `string` | No | Park code(s), e.g. `"yose"` or `"yose,grca"` |
+| `limit` | `number` | No | Max results (default: 10, max: 50) |
+| `start` | `number` | No | Start position for pagination |
+| `q` | `string` | No | Search term for name or description |
+
+### getEvents
+
+Find upcoming events at parks.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `parkCode` | `string` | No | Park code(s), e.g. `"yose"` or `"yose,grca"` |
+| `limit` | `number` | No | Max results (default: 10, max: 50) |
+| `start` | `number` | No | Start position for pagination |
+| `dateStart` | `string` | No | Start date filter (`YYYY-MM-DD`) |
+| `dateEnd` | `string` | No | End date filter (`YYYY-MM-DD`) |
+| `q` | `string` | No | Search term for title or description |
+
+## Example Prompts
+
 ```
 Tell me about national parks in Colorado.
 ```
 
-### Getting Details About a Specific Park
 ```
 What's the entrance fee for Yellowstone National Park?
 ```
 
-### Checking for Alerts or Closures
 ```
 Are there any closures or alerts at Yosemite right now?
 ```
 
-### Finding Visitor Centers
-```
-What visitor centers are available at Grand Canyon National Park?
-```
-
-### Looking for Campgrounds
-```
-Are there any campgrounds with electrical hookups in Zion National Park?
-```
-
-### Finding Upcoming Events
-```
-What events are happening at Acadia National Park next weekend?
-```
-
-### Planning a Trip Based on Activities
 ```
 Which national parks in Utah have good hiking trails?
 ```
 
-## License
+## Park Codes
 
-This MCP server is licensed under the MIT License. See the LICENSE file for details.
-
-
-## Appendix: Popular National Parks and their codes
-
-| Park Name | Park Code |
-|-----------|-----------|
-| Yosemite | yose |
-| Grand Canyon | grca |
-| Yellowstone | yell |
-| Zion | zion |
-| Great Smoky Mountains | grsm |
-| Acadia | acad |
-| Olympic | olym |
-| Rocky Mountain | romo |
-| Joshua Tree | jotr |
-| Sequoia & Kings Canyon | seki |
+| Park | Code | Park | Code |
+|------|------|------|------|
+| Yosemite | `yose` | Great Smoky Mountains | `grsm` |
+| Grand Canyon | `grca` | Acadia | `acad` |
+| Yellowstone | `yell` | Olympic | `olym` |
+| Zion | `zion` | Rocky Mountain | `romo` |
+| Joshua Tree | `jotr` | Sequoia & Kings Canyon | `seki` |
 
 For a complete list, visit the [NPS website](https://www.nps.gov/findapark/index.htm).
+
+## Quick Start
+
+### Local Development
+
+```bash
+git clone https://github.com/NimbleBrainInc/mcp-server-nationalparks.git
+cd mcp-server-nationalparks
+
+# Install dependencies
+npm install
+
+# Build
+npm run build
+
+# Run (stdio mode for Claude Desktop / mpak)
+node build/index.js --stdio
+
+# Run (HTTP mode for cloud deployment)
+node build/index.js
+```
+
+The server supports HTTP transport with:
+- Health check: `GET /health`
+- MCP endpoint: `POST /mcp`
+
+### Development
+
+```bash
+# Build TypeScript
+make build
+
+# Build MCPB bundle locally
+make bundle
+
+# Bump version across all files
+make bump VERSION=0.3.0
+```
+
+## About
+
+National Parks MCP Server is published on the [mpak registry](https://mpak.dev?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks) and built by [NimbleBrain](https://nimblebrain.ai?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks). mpak is an open registry for [Model Context Protocol](https://modelcontextprotocol.io) servers.
+
+- [mpak registry](https://mpak.dev?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks)
+- [NimbleBrain](https://nimblebrain.ai?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks)
+- [MCP specification](https://modelcontextprotocol.io)
+- [Discord community](https://nimblebrain.ai/discord?utm_source=github&utm_medium=readme&utm_campaign=mcp-nationalparks)
+
+## License
+
+MIT

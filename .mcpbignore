@@ -8,6 +8,12 @@
 /src/
 tsconfig.json
 
+# Tests
+/tests/
+/e2e/
+vitest.config.ts
+pyproject.toml
+
 # Dev/build config
 Makefile
 smithery.yaml
