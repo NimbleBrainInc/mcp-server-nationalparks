@@ -1,6 +1,6 @@
 {
   "name": "mcp-server-nationalparks",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "MCP server for National Parks Service API",
   "main": "build/index.js",
   "type": "module",

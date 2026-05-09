@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.4",
   "name": "@nimblebraininc/nationalparks",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "MCP server for National Parks Service API - search parks, get details, alerts, campgrounds, events, and visitor centers",
   "author": {
     "name": "NimbleBrain Inc",
